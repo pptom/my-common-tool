@@ -1,0 +1,139 @@
+package com.sinotrans.gd.common.entity;
+
+
+import org.springframework.http.HttpStatus;
+
+import java.io.Serializable;
+
+public class R<T> implements Serializable {
+    private boolean result;
+    private String msg;
+    private String error;
+    private boolean success = true;//ext返回需要
+
+    private T object;
+    private int statusCode;
+
+    private R() {
+    }
+
+    public R(boolean result) {
+        this.result = result;
+    }
+
+    public R(boolean result, String msg) {
+        this.result = result;
+        this.msg = msg;
+    }
+
+    public R(boolean result, String msg, String error, int statusCode, T object) {
+        this.statusCode = statusCode;
+        this.result = result;
+        this.msg = msg;
+        this.error = error;
+        this.object = object;
+    }
+
+    public static R spj(SinotransPageJson spj) {
+        return createResult(spj.isResult(), spj.getMsg(), spj.getError(), HttpStatus.OK.value(), spj.getObject());
+    }
+
+
+    public static <T> R<T> success() {
+        return createResult(true, null, null, HttpStatus.OK.value(), null);
+    }
+
+    public static <T> R<T> success(String msg) {
+        return createResult(true, msg, null, HttpStatus.OK.value(), null);
+    }
+
+    public static <T> R<T> success(T object) {
+        return createResult(true, null, null, HttpStatus.OK.value(), object);
+    }
+
+    public static <T> R<T> success(String msg, T object) {
+        return createResult(true, msg, null, HttpStatus.OK.value(), object);
+    }
+
+    public static <T> R<T> success(String msg, int statusCode, T object) {
+        return createResult(true, msg, null, statusCode, object);
+    }
+
+    public static <T> R<T> fail() {
+        return createResult(false, null, null, HttpStatus.OK.value(), null);
+    }
+
+    public static <T> R<T> fail(String error) {
+        return createResult(false, null, error, HttpStatus.OK.value(), null);
+    }
+
+    public static <T> R<T> fail(String error, T object) {
+        return createResult(false, null, error, HttpStatus.OK.value(), object);
+    }
+
+    public static <T> R<T> fail(String error, int statusCode, T object) {
+        return createResult(false, null, error, statusCode, object);
+    }
+
+    /**
+     * 返回结果
+     *
+     * @param result     是否
+     * @param msg        成功消息
+     * @param error      错误消息
+     * @param statusCode 状态码
+     * @param object     返回数据
+     * @return
+     */
+    private static <T> R<T> createResult(boolean result, String msg, String error, int statusCode, T object) {
+        return new R<>(result, msg, error, statusCode, object);
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public T getObject() {
+        return object;
+    }
+
+    public void setObject(T object) {
+        this.object = object;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+}
